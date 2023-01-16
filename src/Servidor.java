@@ -4,25 +4,25 @@ import java.nio.charset.StandardCharsets;
 
 class Servidor {
     public static void main(String[] argv) throws Exception {
-        String clientSentence;
         String capitalizedSentence = null;
-        ServerSocket welcomeSocket = new ServerSocket(6789);
+        ServerSocket welcomeSocket = new ServerSocket(1234);
 
         while (true) {
             Socket connectionSocket = welcomeSocket.accept();
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
-            clientSentence = inFromClient.readLine();
-            Trama trama = new Trama();
-            // extraer cantidad de bytes, data y checksum de la trama recibida
+            byte[] tramaBytes = inFromClient.readLine().getBytes();
+            Trama trama = Trama.fromBytes(tramaBytes);
             // verificar checksum
             if (verificarChecksum(trama)) {
                 // convertir data de hexadecimal a string
                 trama.setData(fromHex(trama.getData()));
                 // realizar operación y asignar el resultado a la variable capitalizedSentence
                 outToClient.writeBytes(capitalizedSentence);
+                connectionSocket.close();
             } else {
                 outToClient.writeBytes("Checksum incorrecto");
+                connectionSocket.close();
             }
         }
     }
