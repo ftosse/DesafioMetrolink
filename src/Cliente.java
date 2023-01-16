@@ -12,6 +12,7 @@ class Cliente {
             DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             sentence = inFromUser.readLine();
+            //System.out.println(sentence);
             Trama trama = new Trama(sentence.length(), sentence, 0);
             // convertir data a hexadecimal
             trama.setData(toHex(trama.getData()));
@@ -19,6 +20,7 @@ class Cliente {
             trama.setChecksum(calcularChecksum(trama));
             // enviar trama al servidor
             outToServer.writeBytes(trama.getCantidadBytes() + trama.getData() + trama.getChecksum());
+
             modifiedSentence = inFromServer.readLine();
             System.out.println("FROM SERVER: " + modifiedSentence);
             clientSocket.close();

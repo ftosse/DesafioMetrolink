@@ -9,6 +9,7 @@ class Servidor {
 
         while (true) {
             Socket connectionSocket = welcomeSocket.accept();
+            System.out.println("Cliente conectado");
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
             byte[] tramaBytes = inFromClient.readLine().getBytes();
@@ -18,7 +19,9 @@ class Servidor {
                 // convertir data de hexadecimal a string
                 trama.setData(fromHex(trama.getData()));
                 // realizar operación y asignar el resultado a la variable capitalizedSentence
+                assert capitalizedSentence != null;
                 outToClient.writeBytes(capitalizedSentence);
+                System.out.println(capitalizedSentence);
                 connectionSocket.close();
             } else {
                 outToClient.writeBytes("Checksum incorrecto");
