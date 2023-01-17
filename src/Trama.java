@@ -38,7 +38,7 @@ class Trama {
         // parsear el arreglo de bytes para extraer la cantidad de bytes, los datos y el checksum
         int cantidadBytes = (int) tramaBytes[0];
         byte[] dataBytes = Arrays.copyOfRange(tramaBytes, 1, tramaBytes.length - 1);
-        String data = new String(dataBytes);
+        String data  = new String(dataBytes);
         int checksum = (int) tramaBytes[tramaBytes.length - 1];
         // crear un nuevo objeto Trama con la información extraída
         return new Trama(cantidadBytes, data, checksum);

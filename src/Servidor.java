@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
+
 class Servidor {
     public static void main(String[] argv) throws Exception {
         String capitalizedSentence = null;
@@ -13,13 +14,16 @@ class Servidor {
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
             DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
             byte[] tramaBytes = inFromClient.readLine().getBytes();
+            System.out.println("llegada al servidor de la trama del cliente: " + tramaBytes);
             Trama trama = Trama.fromBytes(tramaBytes);
+            System.out.println("verificacion del checksum:"+ verificarChecksum(trama));
             // verificar checksum
             if (verificarChecksum(trama)) {
                 // convertir data de hexadecimal a string
                 trama.setData(fromHex(trama.getData()));
                 // realizar operación y asignar el resultado a la variable capitalizedSentence
-                assert capitalizedSentence != null;
+                //assert capitalizedSentence != null;
+                capitalizedSentence= trama.getData();
                 outToClient.writeBytes(capitalizedSentence);
                 System.out.println(capitalizedSentence);
                 connectionSocket.close();
